@@ -1,0 +1,12 @@
+# Ignore
+__history
+__recovery
+Android64
+Android64/Debug/*.*
+Android64/Debug/CurrEx/*.*
+Android64/Debug/CurrEx/bin/*.*
+Win32
+
+# Allow
+!/Win32/Debug/CurrEx.exe
+!/Android64/Debug/CurrEx/bin/CurrEx.apk

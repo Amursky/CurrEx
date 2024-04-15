@@ -1,0 +1,37 @@
+inherited FormMain_LgXhdpiPh: TFormMain_LgXhdpiPh
+  ClientHeight = 695
+  ClientWidth = 450
+  DesignerMasterStyle = 3
+  inherited ListView1: TListView
+    Position.Y = 300.000000000000000000
+    Size.Width = 450.000000000000000000
+    Size.Height = 340.000000000000000000
+  end
+  inherited Header: TToolBar
+    Size.Width = 450.000000000000000000
+    inherited HeaderLabel: TLabel [0]
+    end
+    inherited Rectangle1: TRectangle [1]
+      Size.Width = 450.000000000000000000
+    end
+  end
+  inherited Footer: TToolBar
+    Position.Y = 640.000000000000000000
+    Size.Width = 450.000000000000000000
+    inherited LblMessage: TLabel
+      Position.X = 88.000000000000000000
+    end
+    inherited BtnExit: TButton
+      Position.X = 402.000000000000000000
+    end
+  end
+  inherited BtnRate: TButton
+    Position.X = 260.000000000000000000
+  end
+  inherited Button1: TButton
+    Anchors = [akTop, akRight]
+    Position.X = 402.000000000000000000
+    Position.Y = 257.000000000000000000
+    Size.PlatformDefault = False
+  end
+end
