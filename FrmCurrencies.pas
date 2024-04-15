@@ -38,6 +38,8 @@ var
 implementation
 
 {$R *.fmx}
+{$R *.LgXhdpiPh.fmx ANDROID}
+
 uses Common;
 
 procedure TFormCurrencies.FormActivate(Sender: TObject);

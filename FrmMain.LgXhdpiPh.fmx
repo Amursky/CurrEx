@@ -10,6 +10,7 @@ inherited FormMain_LgXhdpiPh: TFormMain_LgXhdpiPh
   inherited Header: TToolBar
     Size.Width = 450.000000000000000000
     inherited HeaderLabel: TLabel [0]
+      Size.Width = 450.000000000000000000
     end
     inherited Rectangle1: TRectangle [1]
       Size.Width = 450.000000000000000000
@@ -18,11 +19,14 @@ inherited FormMain_LgXhdpiPh: TFormMain_LgXhdpiPh
   inherited Footer: TToolBar
     Position.Y = 640.000000000000000000
     Size.Width = 450.000000000000000000
-    inherited LblMessage: TLabel
-      Position.X = 88.000000000000000000
-    end
-    inherited BtnExit: TButton
-      Position.X = 402.000000000000000000
+    inherited Rectangle2: TRectangle
+      Size.Width = 450.000000000000000000
+      inherited BtnExit: TButton
+        Position.X = 402.000000000000000000
+      end
+      inherited LblMessage: TLabel
+        Position.X = 88.000000000000000000
+      end
     end
   end
   inherited BtnRate: TButton

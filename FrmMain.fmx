@@ -16,7 +16,7 @@ object FormMain: TFormMain
   DesignerMasterStyle = 3
   object ListView1: TListView
     ItemAppearanceClassName = 'TListItemAppearance'
-    ItemEditAppearanceClassName = 'TListItemShowCheckAppearance'
+    ItemEditAppearanceClassName = 'TListItemDeleteAppearance'
     HeaderAppearanceClassName = 'TListHeaderObjects'
     FooterAppearanceClassName = 'TListHeaderObjects'
     Align = Bottom
@@ -29,6 +29,7 @@ object FormMain: TFormMain
     ItemAppearance.ItemEditHeight = 26
     ItemAppearance.HeaderHeight = 22
     ItemAppearance.FooterHeight = 22
+    ItemAppearanceObjects.ItemObjects.Accessory.Visible = False
   end
   object Header: TToolBar
     Size.Width = 384.000000000000000000
@@ -44,9 +45,10 @@ object FormMain: TFormMain
       Size.PlatformDefault = False
     end
     object HeaderLabel: TLabel
-      Align = Center
+      Align = Client
+      StyledSettings = [Family, Size, Style]
       Size.Width = 384.000000000000000000
-      Size.Height = 25.000000000000000000
+      Size.Height = 55.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = 'HeaderLabelStyle1'
       TextSettings.HorzAlign = Center
@@ -61,44 +63,52 @@ object FormMain: TFormMain
     Size.PlatformDefault = False
     StyleLookup = 'FooterStyle1'
     TabOrder = 1
-    object LblMessage: TLabel
-      Align = HorzCenter
-      Position.X = 55.000000000000000000
-      Size.Width = 274.000000000000000000
+    object Rectangle2: TRectangle
+      Align = Client
+      Fill.Color = claLightblue
+      Size.Width = 384.000000000000000000
       Size.Height = 55.000000000000000000
       Size.PlatformDefault = False
-      StyleLookup = 'buttonstylelabel'
-      TextSettings.HorzAlign = Center
-      Text = 'message'
-      TabOrder = 2
-    end
-    object BtnRetry: TButton
-      Align = Left
-      Hint = 'retry connect server'
-      Margins.Left = 8.000000000000000000
-      Position.X = 8.000000000000000000
-      Position.Y = 8.000000000000000000
-      Size.Width = 40.000000000000000000
-      Size.Height = 40.000000000000000000
-      Size.PlatformDefault = False
-      StyleLookup = 'refreshtoolbutton'
-      TabOrder = 1
-      Text = 'Retry'
-      OnClick = BtnRetryClick
-    end
-    object BtnExit: TButton
-      Align = Right
-      Hint = 'retry connect server'
-      Margins.Right = 8.000000000000000000
-      Position.X = 336.000000000000000000
-      Position.Y = 8.000000000000000000
-      Size.Width = 40.000000000000000000
-      Size.Height = 40.000000000000000000
-      Size.PlatformDefault = False
-      StyleLookup = 'stoptoolbutton'
-      TabOrder = 0
-      Text = 'Retry'
-      OnClick = BtnExitClick
+      object BtnRetry: TButton
+        Align = Left
+        Hint = 'retry connect server'
+        Margins.Left = 8.000000000000000000
+        Position.X = 8.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 40.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'refreshtoolbutton'
+        TabOrder = 1
+        Text = 'Retry'
+        OnClick = BtnRetryClick
+      end
+      object BtnExit: TButton
+        Align = Right
+        Hint = 'retry connect server'
+        Margins.Right = 8.000000000000000000
+        Position.X = 336.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 40.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'stoptoolbutton'
+        TabOrder = 0
+        Text = 'Retry'
+        OnClick = BtnExitClick
+      end
+      object LblMessage: TLabel
+        Align = HorzCenter
+        StyledSettings = [Family, Size, Style]
+        Position.X = 55.000000000000000000
+        Size.Width = 274.000000000000000000
+        Size.Height = 55.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'buttonstylelabel'
+        TextSettings.HorzAlign = Center
+        Text = 'message'
+        TabOrder = 2
+      end
     end
   end
   object RectAnimation1: TRectAnimation

@@ -50,6 +50,7 @@ type
     FDGUIxWaitCursor1: TFDGUIxWaitCursor;
     FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink;
     Rectangle1: TRectangle;
+    Rectangle2: TRectangle;
     procedure BtnRetryClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure BtnExitClick(Sender: TObject);
@@ -82,6 +83,7 @@ var
 implementation
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
+{$R *.Windows.fmx MSWINDOWS}
 
 uses JSON, Math, FMX.DialogService, System.IOUtils, System.Generics.Collections,
      Common, FrmCurrencies;
