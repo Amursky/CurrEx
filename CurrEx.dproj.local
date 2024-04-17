@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.840,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\FrmMain.fmx=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\HeaderFooterTemplate.fmx</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.766,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\HeaderFooterApplication.dproj=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\CurrEx.dproj</Transaction>
     <Transaction>1899.12.30 00:00:00.000.075,=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\FrmCurrencies.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.840,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\FrmMain.pas=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\HeaderFooterTemplate.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.766,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\HeaderFooterApplication.dproj=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\CurrEx.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.840,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\FrmMain.fmx=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\HeaderFooterTemplate.fmx</Transaction>
     <Transaction>1899.12.30 00:00:00.000.956,=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\Common.pas</Transaction>
-    <Transaction>2024.04.15 08:50:52.925,=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\CurrEx.s3db</Transaction>
-  </Transactions>  <ActiveMobileDevice>   <NoProfile Android64="R58M46WQS6B"/>
-  </ActiveMobileDevice>
+    <Transaction>1899.12.30 00:00:00.000.925,=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\CurrEx.s3db</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.840,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\FrmMain.pas=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\HeaderFooterTemplate.pas</Transaction>
+  </Transactions>
+	<ActiveMobileDevice>
+		<NoProfile Android64=""/>
+	</ActiveMobileDevice>
 </BorlandProject>

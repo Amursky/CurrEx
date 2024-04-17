@@ -1,3 +1,31 @@
 inherited FormMain_Windows: TFormMain_Windows
   DesignerMasterStyle = 3
+  inherited ListView1: TListView
+    Position.Y = 272.000000000000000000
+  end
+  inherited Header: TToolBar
+    Size.Height = 55.000000000000000000
+    inherited Rectangle1: TRectangle
+      Size.Height = 55.000000000000000000
+    end
+    inherited HeaderLabel: TLabel
+      Size.Height = 55.000000000000000000
+    end
+  end
+  inherited Footer: TToolBar
+    Position.Y = 512.000000000000000000
+    Size.Height = 55.000000000000000000
+    inherited Rectangle2: TRectangle
+      Size.Height = 55.000000000000000000
+      inherited BtnRetry: TButton
+        Size.Height = 55.000000000000000000
+      end
+      inherited BtnExit: TButton
+        Position.Y = 4.000000000000000000
+      end
+      inherited LblMessage: TLabel
+        Size.Height = 55.000000000000000000
+      end
+    end
+  end
 end

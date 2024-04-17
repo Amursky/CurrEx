@@ -4,22 +4,23 @@ inherited FormCurrencies_LgXhdpiPh: TFormCurrencies_LgXhdpiPh
   DesignerMasterStyle = 3
   inherited ListBox: TListBox
     Size.Width = 450.000000000000000000
-    Size.Height = 569.000000000000000000
+    Size.Height = 599.000000000000000000
     Viewport.Width = 450.000000000000000000
-    Viewport.Height = 569.000000000000000000
+    Viewport.Height = 599.000000000000000000
   end
   inherited Panel1: TPanel
-    Position.Y = 632.000000000000000000
+    Position.Y = 647.000000000000000000
     Size.Width = 450.000000000000000000
     inherited Rectangle1: TRectangle
       Size.Width = 450.000000000000000000
     end
     inherited BtnCancel: TButton
-      Position.X = 248.000000000000000000
+      Position.X = 320.000000000000000000
+      Size.Height = 32.000000000000000000
     end
     inherited BtnOk: TButton
-      Position.Y = 16.000000000000000000
-      Size.Height = 39.000000000000000000
+      Position.X = 48.000000000000000000
+      Size.Height = 32.000000000000000000
     end
   end
   inherited Panel2: TPanel

@@ -3,39 +3,73 @@ inherited FormMain_LgXhdpiPh: TFormMain_LgXhdpiPh
   ClientWidth = 450
   DesignerMasterStyle = 3
   inherited ListView1: TListView
-    Position.Y = 300.000000000000000000
+    Position.Y = 307.000000000000000000
     Size.Width = 450.000000000000000000
     Size.Height = 340.000000000000000000
   end
   inherited Header: TToolBar
     Size.Width = 450.000000000000000000
-    inherited HeaderLabel: TLabel [0]
+    inherited Rectangle1: TRectangle
       Size.Width = 450.000000000000000000
     end
-    inherited Rectangle1: TRectangle [1]
+    inherited HeaderLabel: TLabel
       Size.Width = 450.000000000000000000
     end
   end
   inherited Footer: TToolBar
-    Position.Y = 640.000000000000000000
+    Position.Y = 647.000000000000000000
     Size.Width = 450.000000000000000000
     inherited Rectangle2: TRectangle
       Size.Width = 450.000000000000000000
       inherited BtnExit: TButton
-        Position.X = 402.000000000000000000
+        Position.X = 394.000000000000000000
       end
       inherited LblMessage: TLabel
         Position.X = 88.000000000000000000
       end
     end
   end
+  inherited BtnBase: TButton
+    Position.X = 347.000000000000000000
+  end
+  inherited BtnBuy: TButton
+    Position.X = 347.000000000000000000
+  end
   inherited BtnRate: TButton
-    Position.X = 260.000000000000000000
+    Position.X = 26.000000000000000000
+    Position.Y = 108.000000000000000000
+    Size.Width = 50.000000000000000000
+    Size.Height = 53.000000000000000000
+  end
+  inherited LblBuy: TLabel
+    Position.X = 107.000000000000000000
+    Position.Y = 175.000000000000000000
+  end
+  inherited LblRate: TLabel
+    Position.X = 107.000000000000000000
+    Position.Y = 127.000000000000000000
+  end
+  inherited LblSale: TLabel
+    Position.X = 107.000000000000000000
+    Position.Y = 79.000000000000000000
+  end
+  inherited NumBase: TNumberBox
+    Position.X = 155.000000000000000000
+  end
+  inherited NumBuy: TNumberBox
+    Position.X = 155.000000000000000000
+  end
+  inherited NumRate: TNumberBox
+    Position.X = 155.000000000000000000
+  end
+  inherited BtnConvert: TButton
+    Position.X = 155.000000000000000000
   end
   inherited Button1: TButton
-    Anchors = [akTop, akRight]
-    Position.X = 402.000000000000000000
-    Position.Y = 257.000000000000000000
-    Size.PlatformDefault = False
+    Position.X = 394.000000000000000000
+    Position.Y = 259.000000000000000000
+  end
+  inherited RESTRequest: TRESTRequest
+    Left = 40
   end
 end

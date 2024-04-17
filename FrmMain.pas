@@ -15,7 +15,7 @@ uses
   FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.SQLite, FireDAC.Phys.SQLiteDef,
   FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.FMXUI.Wait, FireDAC.Stan.Param,
   FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
-  FireDAC.Comp.UI;
+  FireDAC.Comp.UI, FMX.ExtCtrls, FMX.ComboEdit, FMX.ListBox;
 
 type
   TFormMain = class(TForm)
@@ -51,6 +51,7 @@ type
     FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink;
     Rectangle1: TRectangle;
     Rectangle2: TRectangle;
+    StyleBook1: TStyleBook;
     procedure BtnRetryClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure BtnExitClick(Sender: TObject);
@@ -84,6 +85,7 @@ implementation
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
 {$R *.Windows.fmx MSWINDOWS}
+{$R *.LgXhdpiTb.fmx ANDROID}
 
 uses JSON, Math, FMX.DialogService, System.IOUtils, System.Generics.Collections,
      Common, FrmCurrencies;
@@ -350,11 +352,11 @@ end;
 
 procedure TFormMain.ActClearExecute(Sender: TObject);
 begin
-FDConnection.ExecSQL('delete from Convertations');
+{FDConnection.ExecSQL('delete from Convertations');
 QrySelectAll.Close();
-QrySelectAll.Open;
-{  doesn't work !
-TDialogService.MessageDialog('Clear the history of converations ?',
+QrySelectAll.Open;}
+//  doesn't work !
+TDialogService.MessageDialog('Clear the history of convertations ?',
       TMsgDlgType.mtCustom, [TMsgDlgBtn.mbCancel, TMsgDlgBtn.mbYes],
       TMsgDlgBtn.mbCancel, 0,
           procedure(const aResult: TModalResult)  // always 1 ???
@@ -367,7 +369,7 @@ TDialogService.MessageDialog('Clear the history of converations ?',
               end;
           end
 );
-}
+
 end;
 
 procedure TFormMain.ActClearUpdate(Sender: TObject);
@@ -386,9 +388,20 @@ procedure TFormMain.ActConvertExecute(Sender: TObject);
 begin
 QryInsert.ParamByName('Item').AsString := NumBase.Text + ' ' + CurSale + ' -> '
   + NumBuy.Text + ' ' + CurBuy + ' by ' + NumRate.Text;
-QryInsert.ExecSQL();
-QrySelectAll.Close();
-QrySelectAll.Open;
+QryInsert.Connection.StartTransaction;
+try
+  QryInsert.ExecSQL();
+  QrySelectAll.Close();
+  QrySelectAll.Open;
+  QryInsert.Connection.Commit;
+except
+  on E: Exception do
+    begin
+    QryInsert.Connection.Rollback;
+    TDialogService.MessageDialog(E.Message, TMsgDlgType.mtError,
+        [TMsgDlgBtn.mbClose], TMsgDlgBtn.mbClose, 0, nil);
+    end;
+end;
 end;
 
 procedure TFormMain.QrySelectAllAfterOpen(DataSet: TDataSet);
