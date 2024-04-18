@@ -1,9 +1,7 @@
 inherited FormMain_Windows: TFormMain_Windows
+  Fill.Kind = Solid
   DesignerMasterStyle = 3
-  inherited ListView1: TListView
-    Position.Y = 272.000000000000000000
-  end
-  inherited Header: TToolBar
+  inherited Header: TToolBar [0]
     Size.Height = 55.000000000000000000
     inherited Rectangle1: TRectangle
       Size.Height = 55.000000000000000000
@@ -12,7 +10,7 @@ inherited FormMain_Windows: TFormMain_Windows
       Size.Height = 55.000000000000000000
     end
   end
-  inherited Footer: TToolBar
+  inherited Footer: TToolBar [1]
     Position.Y = 512.000000000000000000
     Size.Height = 55.000000000000000000
     inherited Rectangle2: TRectangle
@@ -21,11 +19,23 @@ inherited FormMain_Windows: TFormMain_Windows
         Size.Height = 55.000000000000000000
       end
       inherited BtnExit: TButton
-        Position.Y = 4.000000000000000000
+        Size.Height = 55.000000000000000000
       end
       inherited LblMessage: TLabel
         Size.Height = 55.000000000000000000
       end
     end
+  end
+  inherited RectAnimation1: TRectAnimation [2]
+  end
+  inherited LayMain: TLayout [3]
+    Position.Y = 55.000000000000000000
+  end
+  inherited ListView1: TListView [4]
+    Size.Height = 229.000000000000000000
+    ItemAppearanceObjects.ItemObjects.Detail.TextVertAlign = Leading
+  end
+  inherited ActionList1: TActionList
+    Top = 424
   end
 end

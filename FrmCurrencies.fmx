@@ -3407,7 +3407,7 @@ object FormCurrencies: TFormCurrencies
     end
   end
   object Panel1: TPanel
-    Align = Bottom
+    Align = MostBottom
     Position.Y = 483.000000000000000000
     Size.Width = 409.000000000000000000
     Size.Height = 48.000000000000000000
@@ -3452,7 +3452,7 @@ object FormCurrencies: TFormCurrencies
     end
   end
   object Panel2: TPanel
-    Align = Top
+    Align = MostTop
     Size.Width = 409.000000000000000000
     Size.Height = 48.000000000000000000
     Size.PlatformDefault = False

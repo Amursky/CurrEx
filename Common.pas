@@ -10,7 +10,7 @@ const
   END_POINT_CONVERT = 'latest.json';
 
 var
-  CurSale: String = 'USD';
+  CurBase: String = 'USD';
   CurBuy: String = 'USD';
   CurRate: Currency = 0;
   Currencies: TStrings = nil;

@@ -15,7 +15,8 @@ uses
   FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.SQLite, FireDAC.Phys.SQLiteDef,
   FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.FMXUI.Wait, FireDAC.Stan.Param,
   FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
-  FireDAC.Comp.UI, FMX.ExtCtrls, FMX.ComboEdit, FMX.ListBox;
+  FireDAC.Comp.UI, FMX.ExtCtrls, FMX.ComboEdit, FMX.ListBox, FMX.Layouts,
+  ButtonDisableable;
 
 type
   TFormMain = class(TForm)
@@ -29,15 +30,6 @@ type
     BtnRetry: TButton;
     BtnExit: TButton;
     NumBase: TNumberBox;
-    LblSale: TLabel;
-    BtnBase: TButton;
-    LblRate: TLabel;
-    NumRate: TNumberBox;
-    BtnRate: TButton;
-    LblBuy: TLabel;
-    NumBuy: TNumberBox;
-    BtnBuy: TButton;
-    BtnConvert: TButton;
     ActionList1: TActionList;
     ActConvert: TAction;
     FDConnection: TFDConnection;
@@ -46,12 +38,28 @@ type
     QryInsert: TFDQuery;
     ListView1: TListView;
     ActClear: TAction;
-    Button1: TButton;
     FDGUIxWaitCursor1: TFDGUIxWaitCursor;
     FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink;
     Rectangle1: TRectangle;
     Rectangle2: TRectangle;
     StyleBook1: TStyleBook;
+    Layout1: TLayout;
+    LblBase: TLabel;
+    BtnBase: TButton;
+    Layout2: TLayout;
+    BtnRate: TButton;
+    LblRate: TLabel;
+    NumRate: TNumberBox;
+    LblTime: TLabel;
+    Layout3: TLayout;
+    LblBuy: TLabel;
+    NumBuy: TNumberBox;
+    BtnBuy: TButton;
+    LayMain: TLayout;
+    Layout4: TLayout;
+    BtnConvert: TButton;
+    Layout5: TLayout;
+    BtnClearHistory: TButton;
     procedure BtnRetryClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure BtnExitClick(Sender: TObject);
@@ -69,7 +77,11 @@ type
     procedure ActClearExecute(Sender: TObject);
     procedure FDConnectionBeforeConnect(Sender: TObject);
     procedure FDConnectionAfterConnect(Sender: TObject);
+    procedure FormResize(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
   private
+    //Log: TextFile;
+    procedure ToLog(const aMsg: String);
     procedure OnGetCurrencies;
     procedure OnGetCurrenciesError(Sender: TObject);
     procedure EnableWorkingMode;
@@ -85,21 +97,56 @@ implementation
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
 {$R *.Windows.fmx MSWINDOWS}
-{$R *.LgXhdpiTb.fmx ANDROID}
 
-uses JSON, Math, FMX.DialogService, System.IOUtils, System.Generics.Collections,
+uses JSON, Math, FMX.DialogService, FMX.Platform,
+     System.IOUtils, System.Generics.Collections,
      Common, FrmCurrencies;
 
 procedure TFormMain.FormCreate(Sender: TObject);
 begin
 RESTClient.BaseURL := BASE_URL;
 RESTRequest.Resource := END_POINT_CURRENCIES;
+LblTime.Text := '';
 with RESTRequest.Params.AddItem do
   begin
   Name := 'app_id';
   Value := APP_TOKEN;
   end;
 self.Fill.Color := TAlphaColorRec.Lavender;
+//AssignFile(Log, TPath.Combine(TPath.GetDocumentsPath, 'CurrEx.txt'));
+//Rewrite(Log);
+ToLog('*** CurrEx started');
+end;
+
+procedure TFormMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+ToLog('*** CurrEx finished');
+//CloseFile(Log);
+CanClose := TRUE;
+end;
+
+procedure TFormMain.FormResize(Sender: TObject);
+var Screen: IFMXScreenService;
+begin
+{$IF DEFINED(ANDROID)}
+if TPlatformServices.Current.SupportsPlatformService(IFMXScreenService, IInterface(Screen))
+  then
+    if (Screen.GetScreenOrientation = TScreenOrientation.Portrait) or
+        (Screen.GetScreenOrientation = TScreenOrientation.InvertedPortrait) then
+        begin
+        ToLog('portrait');
+        LayMain.Align := TAlignLayout.Top;
+        LayMain.Height := 228;
+        end
+    else if (Screen.GetScreenOrientation = TScreenOrientation.Landscape) or
+             (Screen.GetScreenOrientation = TScreenOrientation.InvertedLandscape)
+      then
+        begin
+        ToLog('landscape');
+        LayMain.Align := TAlignLayout.Left;
+        LayMain.Width := self.Width / 2;
+        end
+{$ENDIF}
 end;
 
 procedure TFormMain.FormShow(Sender: TObject);
@@ -174,6 +221,7 @@ BtnExit.Enabled := TRUE;
 if Sender is Exception
   then LblMessage.Text := Exception(Sender).Message
   else LblMessage.Text := 'server not answering';
+ToLog(LblMessage.Text);
 end;
 
 procedure TFormMain.EnableWorkingMode;
@@ -182,11 +230,11 @@ BtnRetry.Free;
 BtnExit.Free;
 LblMessage.Text := '';
 LblMessage.Align := TAlignLayout.Client;
-BtnBase.Text := CurSale;
+BtnBase.Text := CurBase;
 with RESTRequest.Params.AddItem do
   begin
   Name := 'base';
-  Value := CurSale;
+  Value := CurBase;
   end;
 BtnBuy.Text := CurBuy;
 with RESTRequest.Params.AddItem do
@@ -213,7 +261,7 @@ BtnBase.Enabled := FALSE;
 BtnRate.Enabled := FALSE;
 BtnBuy.Enabled := FALSE;
 RESTRequest.Resource := END_POINT_CONVERT;
-RESTRequest.Params.ParameterByName('base').Value := CurSale;
+RESTRequest.Params.ParameterByName('base').Value := CurBase;
 RESTRequest.Params.ParameterByName('symbols').Value := CurBuy;
 RESTRequest.ExecuteAsync(OnGetRate, TRUE, TRUE, OnGetRateError);
 end;
@@ -238,8 +286,10 @@ try
                     begin
                     LblMessage.Text := '';
                     NumRate.Value := RoundTo(CurRate, -4);
-                    BtnBase.Text := CurSale;
+                    LblTime.Text := FormatDateTime('hh:nn:ss', Now);
+                    BtnBase.Text := CurBase;
                     BtnBuy.Text := CurBuy;
+                    ToLog(CurBuy + ' / ' + CurBase + ' = ' + FloatToStr(NumRate.Value));
                     end
                   else
                     raise Exception.Create('error parsing sever answer')
@@ -260,8 +310,8 @@ try
       end;
   except on E: Exception do
     begin
-    if BtnBase.Text <> CurSale then
-      CurSale := BtnBase.Text;
+    if BtnBase.Text <> CurBase then
+      CurBase := BtnBase.Text;
     if BtnBuy.Text <> CurBuy then
       CurBuy := BtnBuy.Text;
     OnGetRateError(E)
@@ -285,6 +335,7 @@ if Sender is Exception
   else msg := 'server not answering';
 TDialogService.MessageDialog(msg, TMsgDlgType.mtError,
     [TMsgDlgBtn.mbClose], TMsgDlgBtn.mbClose, 0, nil);
+ToLog(msg);
 LblMessage.Text := '';
 end;
 
@@ -325,7 +376,7 @@ begin
 with FormCurrencies do
   begin
   ToBuy := FALSE;
-  Currency := CurSale;
+  Currency := CurBase;
   Show;
   {
   mr := ShowModal;
@@ -351,43 +402,53 @@ with FormCurrencies do
 end;
 
 procedure TFormMain.ActClearExecute(Sender: TObject);
+var n: Cardinal;
 begin
-{FDConnection.ExecSQL('delete from Convertations');
-QrySelectAll.Close();
-QrySelectAll.Open;}
-//  doesn't work !
 TDialogService.MessageDialog('Clear the history of convertations ?',
       TMsgDlgType.mtCustom, [TMsgDlgBtn.mbCancel, TMsgDlgBtn.mbYes],
       TMsgDlgBtn.mbCancel, 0,
           procedure(const aResult: TModalResult)  // always 1 ???
           begin
-            if aResult = mrOk then
+            if aResult = mrYes then
               begin
-              FDConnection.ExecSQL('delete from Convertations');
+              n := FDConnection.ExecSQL('delete from Convertations');
               QrySelectAll.Close();
               QrySelectAll.Open;
+              ToLog('history cleaned, records: ' + IntToStr(n))
               end;
           end
 );
-
 end;
 
 procedure TFormMain.ActClearUpdate(Sender: TObject);
+var NewEnabled: Boolean;
 begin
 with ListView1 do
-  ActClear.Enabled := Items.Count > 0;
+  NewEnabled := Items.Count > 0;
+if NewEnabled <> ActClear.Enabled then
+  if NewEnabled
+    then BtnClearHistory.StyleLookup := 'BtnClearStyle'
+    else BtnClearHistory.StyleLookup := 'BtnClearStyleDisabled';
+ActClear.Enabled := NewEnabled;
 end;
 
 procedure TFormMain.ActConvertUpdate(Sender: TObject);
+var NewEnabled: Boolean;
 begin
-ActConvert.Enabled := (CurSale <> CurBuy) and (CurRate > 0) and
-                      (NumBase.Value > 0) and (NumBuy.Value > 0);
+NewEnabled := (CurBase <> CurBuy) and (CurRate > 0) and
+              (NumBase.Value > 0) and (NumBuy.Value > 0);
+if NewEnabled <> ActConvert.Enabled then
+  if NewEnabled
+    then BtnConvert.StyleLookup := 'CornerButtonStyle'
+    else BtnConvert.StyleLookup := 'CornerButtonStyleDisabled';
+ActConvert.Enabled := NewEnabled;
 end;
 
 procedure TFormMain.ActConvertExecute(Sender: TObject);
 begin
-QryInsert.ParamByName('Item').AsString := NumBase.Text + ' ' + CurSale + ' -> '
-  + NumBuy.Text + ' ' + CurBuy + ' by ' + NumRate.Text;
+QryInsert.ParamByName('Item').AsString := NumBase.Text + ' ' + CurBase + ' -> '
+  + NumBuy.Text + ' ' + CurBuy + ' by ' + NumRate.Text
+  + ' / ' + FormatDateTime('dd.mm.yyyy hh:nn', Now);
 QryInsert.Connection.StartTransaction;
 try
   QryInsert.ExecSQL();
@@ -405,14 +466,32 @@ end;
 end;
 
 procedure TFormMain.QrySelectAllAfterOpen(DataSet: TDataSet);
+var words: TArray<String>;
 begin
 DataSet.Last;
 ListView1.Items.Clear;
 while not DataSet.Bof do
   begin
-  ListView1.Items.Add.Text := DataSet.Fields[0].AsString;
+  with ListView1.Items.Add do
+    begin
+    words := DataSet.Fields[0].AsString.Split([' / ']);
+    Text := words[0];
+    Detail := words[1];
+    end;
   DataSet.Prior;
   end;
+if (CurRate <= 0) and (ListView1.Items.Count > 0) then
+  begin
+  words := ListView1.Items[0].Text.Split([' ']);
+  CurBase := words[1];
+  CurBuy := words[4];
+  end;
+end;
+
+procedure TFormMain.ToLog(const aMsg: String);
+begin
+//WriteLn(Log, FormatDateTime('dd.mm.yyyy hh:nn:ss  ', Now) + aMsg);
+Log.d(aMsg);
 end;
 
 end.

@@ -90,12 +90,12 @@ with ListBox do
 self.Close();
 if ToBuy
   then cur := CurBuy
-  else cur := CurSale;
+  else cur := CurBase;
 if cur <> Currency then
   begin
   if ToBuy
     then CurBuy := Currency
-    else CurSale := Currency;
+    else CurBase := Currency;
   if Assigned(onChanged) then
     OnChanged(nil);
   end;

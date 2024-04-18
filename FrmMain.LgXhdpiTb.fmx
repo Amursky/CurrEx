@@ -3,8 +3,8 @@ inherited FormMain_LgXhdpiTb: TFormMain_LgXhdpiTb
   ClientWidth = 480
   DesignerMasterStyle = 3
   inherited ListView1: TListView
-    Position.Y = 541.000000000000000000
     Size.Width = 480.000000000000000000
+    Size.Height = 505.000000000000000000
   end
   inherited Header: TToolBar
     Size.Width = 480.000000000000000000
@@ -25,6 +25,45 @@ inherited FormMain_LgXhdpiTb: TFormMain_LgXhdpiTb
       end
       inherited LblMessage: TLabel
         Position.X = 103.000000000000000000
+      end
+    end
+  end
+  inherited LayMain: TLayout
+    Size.Width = 480.000000000000000000
+    inherited Layout1: TLayout
+      Size.Width = 440.000000000000000000
+      inherited BtnBase: TButton
+        Position.X = 360.000000000000000000
+      end
+      inherited NumBase: TNumberBox
+        Size.Width = 240.000000000000000000
+      end
+    end
+    inherited Layout2: TLayout
+      Size.Width = 440.000000000000000000
+      inherited NumRate: TNumberBox
+        Size.Width = 240.000000000000000000
+      end
+      inherited LblTime: TLabel
+        Position.X = 360.000000000000000000
+      end
+    end
+    inherited Layout3: TLayout
+      Size.Width = 440.000000000000000000
+      inherited NumBuy: TNumberBox
+        Size.Width = 240.000000000000000000
+      end
+      inherited BtnBuy: TButton
+        Position.X = 360.000000000000000000
+      end
+    end
+    inherited Layout4: TLayout
+      Size.Width = 440.000000000000000000
+    end
+    inherited Layout5: TLayout
+      Size.Width = 440.000000000000000000
+      inherited BtnClearHistory: TButton
+        Position.X = 408.000000000000000000
       end
     end
   end

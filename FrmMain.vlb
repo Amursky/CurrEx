@@ -8,7 +8,7 @@ Coordinates=749,10,49,33
 Coordinates=582,10,76,51
 
 []
-Coordinates=180,269,47,33
+Coordinates=497,131,70,51
 Visible=True
 ExplicitSubNodes=ClientDataSet1
 
@@ -24,47 +24,20 @@ Coordinates=940,10,91,303
 [BtnRetry]
 Coordinates=308,175,57,51
 
-[NumRate]
-Coordinates=239,269,59,51
-
 [NumBase]
 Coordinates=200,155,61,51
-
-[LblSale]
-Coordinates=72,173,50,51
-
-[BtnBase]
-Coordinates=308,252,56,51
 
 [LblMessage]
 Coordinates=78,1,73,51
 
-[BtnRate]
-Coordinates=200,1,53,51
-
-[BtnConvert]
-Coordinates=497,131,70,51
-
 [RectAnimation1]
 Coordinates=497,208,92,33
-
-[BtnBuy]
-Coordinates=13,173,50,51
 
 [ActConvert]
 Coordinates=121,78,69,33
 
-[NumBuy]
-Coordinates=131,173,56,51
-
 [BtnExit]
 Coordinates=200,78,50,51
-
-[LblRate]
-Coordinates=0,0,52,51
-
-[LblBuy]
-Coordinates=59,77,49,51
 
 [ActionList1]
 Coordinates=418,271,70,33
