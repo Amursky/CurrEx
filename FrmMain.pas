@@ -16,7 +16,7 @@ uses
   FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.FMXUI.Wait, FireDAC.Stan.Param,
   FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
   FireDAC.Comp.UI, FMX.ExtCtrls, FMX.ComboEdit, FMX.ListBox, FMX.Layouts,
-  ButtonDisableable;
+  FMX.Gestures;
 
 type
   TFormMain = class(TForm)
@@ -36,13 +36,11 @@ type
     QryCreateTable: TFDQuery;
     QrySelectAll: TFDQuery;
     QryInsert: TFDQuery;
-    ListView1: TListView;
     ActClear: TAction;
     FDGUIxWaitCursor1: TFDGUIxWaitCursor;
     FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink;
     Rectangle1: TRectangle;
     Rectangle2: TRectangle;
-    StyleBook1: TStyleBook;
     Layout1: TLayout;
     LblBase: TLabel;
     BtnBase: TButton;
@@ -58,8 +56,17 @@ type
     LayMain: TLayout;
     Layout4: TLayout;
     BtnConvert: TButton;
+    ActUse: TAction;
+    LayHistory: TLayout;
     Layout5: TLayout;
     BtnClearHistory: TButton;
+    BtnUse: TButton;
+    ListView1: TListView;
+    StyleBook1: TStyleBook;
+    GestureManager1: TGestureManager;
+    Image1: TImage;
+    Rectangle3: TRectangle;
+    Rectangle4: TRectangle;
     procedure BtnRetryClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure BtnExitClick(Sender: TObject);
@@ -79,7 +86,12 @@ type
     procedure FDConnectionAfterConnect(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure ActUseExecute(Sender: TObject);
+    procedure ActUseUpdate(Sender: TObject);
+    procedure ListView1Gesture(Sender: TObject;
+      const EventInfo: TGestureEventInfo; var Handled: Boolean);
   private
+    OnNewRate: procedure of object;
     //Log: TextFile;
     procedure ToLog(const aMsg: String);
     procedure OnGetCurrencies;
@@ -87,6 +99,7 @@ type
     procedure EnableWorkingMode;
     procedure OnGetRate;
     procedure OnGetRateError(Sender: TObject);
+    procedure Convert;
   public
   end;
 
@@ -113,6 +126,7 @@ with RESTRequest.Params.AddItem do
   Value := APP_TOKEN;
   end;
 self.Fill.Color := TAlphaColorRec.Lavender;
+OnNewRate := nil;
 //AssignFile(Log, TPath.Combine(TPath.GetDocumentsPath, 'CurrEx.txt'));
 //Rewrite(Log);
 ToLog('*** CurrEx started');
@@ -136,7 +150,7 @@ if TPlatformServices.Current.SupportsPlatformService(IFMXScreenService, IInterfa
         begin
         ToLog('portrait');
         LayMain.Align := TAlignLayout.Top;
-        LayMain.Height := 228;
+        LayMain.Height := 195;
         end
     else if (Screen.GetScreenOrientation = TScreenOrientation.Landscape) or
              (Screen.GetScreenOrientation = TScreenOrientation.InvertedLandscape)
@@ -290,6 +304,8 @@ try
                     BtnBase.Text := CurBase;
                     BtnBuy.Text := CurBuy;
                     ToLog(CurBuy + ' / ' + CurBase + ' = ' + FloatToStr(NumRate.Value));
+                    if Assigned(OnNewRate) then
+                      OnNewRate;
                     end
                   else
                     raise Exception.Create('error parsing sever answer')
@@ -444,8 +460,79 @@ if NewEnabled <> ActConvert.Enabled then
 ActConvert.Enabled := NewEnabled;
 end;
 
-procedure TFormMain.ActConvertExecute(Sender: TObject);
+var LongTap: Boolean = FALSE;
+
+procedure TFormMain.ActUseExecute(Sender: TObject);
+var words: TArray<String>;
 begin
+with ListView1 do
+  if (ItemIndex >= 0) and (not LongTap) then
+    try
+    LongTap := TRUE;
+    TDialogService.MessageDialog('Use this convertation as a template ?',
+          TMsgDlgType.mtCustom, [TMsgDlgBtn.mbCancel, TMsgDlgBtn.mbYes],
+          TMsgDlgBtn.mbCancel, 0,
+              procedure(const aResult: TModalResult)  // always 1 ???
+              begin
+                LongTap := FALSE;
+                if aResult = mrYes then
+                  begin
+                  words := Items[ItemIndex].Text.Split([' ']);
+                  CurBase := words[1];
+                  BtnBase.Text := CurBase;
+                  NumBuy.OnChange := nil;
+                  try
+                    NumBase.Value := StrToFloat(words[0]);
+                  finally
+                    NumBuy.OnChange := NumBuyChange;
+                  end;
+                  CurBuy := words[4];
+                  BtnBuy.Text := CurBuy;
+                  BtnRate.OnClick(nil);
+                  end;
+              end
+    );
+    finally
+    //  
+    end;
+end;
+
+procedure TFormMain.ActUseUpdate(Sender: TObject);
+var NewVisible: Boolean;
+    words: TArray<String>;
+begin
+with ListView1 do
+  begin
+  NewVisible := ItemIndex >= 0;
+  if NewVisible then
+    begin
+    words := Items[ItemIndex].Text.Split([' ']);
+    NewVisible := (CurBase <> words[1]) or (CurBuy <> words[4]) or 
+                  (NumBase.Text <> words[0]);
+    end;
+  ActUse.Visible := NewVisible;
+  end;
+end;
+
+procedure TFormMain.ListView1Gesture(Sender: TObject;
+  const EventInfo: TGestureEventInfo; var Handled: Boolean);
+var rec: TRectF;
+begin
+if EventInfo.GestureID = System.UITypes.igiLongTap then
+  with ListView1 do 
+    begin
+    rec := LocalToAbsolute( GetItemRect(ListView1.Items.Count-1) );
+    if (EventInfo.Location.Y < rec.Bottom) and ActUse.Visible then
+      begin
+      ActUseExecute(nil);
+      Handled := TRUE;
+      end;
+    end;
+end;
+
+procedure TFormMain.Convert;
+begin
+OnNewRate := nil;
 QryInsert.ParamByName('Item').AsString := NumBase.Text + ' ' + CurBase + ' -> '
   + NumBuy.Text + ' ' + CurBuy + ' by ' + NumRate.Text
   + ' / ' + FormatDateTime('dd.mm.yyyy hh:nn', Now);
@@ -465,6 +552,12 @@ except
 end;
 end;
 
+procedure TFormMain.ActConvertExecute(Sender: TObject);
+begin
+OnNewRate := Convert;
+BtnRate.OnClick(nil);
+end;
+
 procedure TFormMain.QrySelectAllAfterOpen(DataSet: TDataSet);
 var words: TArray<String>;
 begin
@@ -480,6 +573,7 @@ while not DataSet.Bof do
     end;
   DataSet.Prior;
   end;
+ListView1.ItemIndex := IfThen(DataSet.RecordCount > 0, 0, -1);
 if (CurRate <= 0) and (ListView1.Items.Count > 0) then
   begin
   words := ListView1.Items[0].Text.Split([' ']);

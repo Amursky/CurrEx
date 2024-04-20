@@ -18,6 +18,7 @@ type
     StyleBook1: TStyleBook;
     Rectangle1: TRectangle;
     Rectangle2: TRectangle;
+    Image1: TImage;
     procedure ListBoxDblClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure FormActivate(Sender: TObject);
@@ -39,6 +40,7 @@ implementation
 
 {$R *.fmx}
 {$R *.LgXhdpiPh.fmx ANDROID}
+{$R *.Windows.fmx MSWINDOWS}
 
 uses Common;
 

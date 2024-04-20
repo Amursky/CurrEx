@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.568,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\ButtonDisableable.pas=</Transaction>
     <Transaction>1899.12.30 00:00:00.000.956,=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\Common.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.931,=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.392,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\Unit1.pas=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\ButtonDisableable.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.840,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\FrmMain.fmx=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\HeaderFooterTemplate.fmx</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.840,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\FrmMain.pas=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\HeaderFooterTemplate.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.766,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\CurrEx.dproj=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\HeaderFooterApplication.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.392,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\ButtonDisableable.pas=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.840,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\HeaderFooterTemplate.fmx=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\FrmMain.fmx</Transaction>
     <Transaction>1899.12.30 00:00:00.000.075,=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\FrmCurrencies.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.925,=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\CurrEx.s3db</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.766,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\HeaderFooterApplication.dproj=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\CurrEx.dproj</Transaction>
-    <Transaction>2024.04.17 21:42:41.568,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\ButtonDisableable.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.840,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\HeaderFooterTemplate.pas=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\FrmMain.pas</Transaction>
   </Transactions>
 	<ActiveMobileDevice>
-		<NoProfile Android64="" Android="R58M46WQS6B"/>
+		<NoProfile Android64="" Android=""/>
 	</ActiveMobileDevice>
 </BorlandProject>

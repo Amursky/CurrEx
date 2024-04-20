@@ -13,14 +13,9 @@ inherited FormCurrencies_LgXhdpiPh: TFormCurrencies_LgXhdpiPh
     Size.Width = 450.000000000000000000
     inherited Rectangle1: TRectangle
       Size.Width = 450.000000000000000000
-    end
-    inherited BtnCancel: TButton
-      Position.X = 320.000000000000000000
-      Size.Height = 32.000000000000000000
-    end
-    inherited BtnOk: TButton
-      Position.X = 48.000000000000000000
-      Size.Height = 32.000000000000000000
+      inherited BtnCancel: TButton
+        Position.X = 318.000000000000000000
+      end
     end
   end
   inherited Panel2: TPanel
@@ -30,6 +25,11 @@ inherited FormCurrencies_LgXhdpiPh: TFormCurrencies_LgXhdpiPh
     end
     inherited LblCaption: TLabel
       Size.Width = 450.000000000000000000
+    end
+    inherited Image1: TImage
+      MultiResBitmap.Height = 36
+      MultiResBitmap.Width = 36
+      MultiResBitmap.LoadSize = 2
     end
   end
 end

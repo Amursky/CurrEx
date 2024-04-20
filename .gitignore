@@ -6,6 +6,7 @@ Android64/Debug/*.*
 Android64/Debug/CurrEx/*.*
 Android64/Debug/CurrEx/bin/*.*
 Win32
+ProjectGroup*.*
 
 # Allow
 !/Win32/Debug/CurrEx.exe
