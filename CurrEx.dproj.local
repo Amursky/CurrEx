@@ -2,8 +2,8 @@
 <BorlandProject>
 	<Transactions>
     <Transaction>1899.12.30 00:00:00.000.568,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\ButtonDisableable.pas=</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.956,=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\Common.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.931,=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.956,=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\Common.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.766,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\CurrEx.dproj=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\HeaderFooterApplication.dproj</Transaction>
     <Transaction>1899.12.30 00:00:00.000.392,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\ButtonDisableable.pas=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.840,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\HeaderFooterTemplate.fmx=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\FrmMain.fmx</Transaction>
@@ -12,6 +12,6 @@
     <Transaction>1899.12.30 00:00:00.000.840,C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\HeaderFooterTemplate.pas=C:\Users\dimam\OneDrive\Documents\Embarcadero\Studio\Projects\CurrEx\FrmMain.pas</Transaction>
   </Transactions>
 	<ActiveMobileDevice>
-		<NoProfile Android64="" Android=""/>
+		<NoProfile Android64="" Android="R58M46WQS6B"/>
 	</ActiveMobileDevice>
 </BorlandProject>

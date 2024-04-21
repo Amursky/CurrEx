@@ -16,7 +16,7 @@ uses
   FireDAC.Stan.ExprFuncs, FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.FMXUI.Wait, FireDAC.Stan.Param,
   FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
   FireDAC.Comp.UI, FMX.ExtCtrls, FMX.ComboEdit, FMX.ListBox, FMX.Layouts,
-  FMX.Gestures;
+  FMX.Gestures, System.ImageList, FMX.ImgList, FMX.Effects;
 
 type
   TFormMain = class(TForm)
@@ -36,7 +36,7 @@ type
     QryCreateTable: TFDQuery;
     QrySelectAll: TFDQuery;
     QryInsert: TFDQuery;
-    ActClear: TAction;
+    ActClearHistory: TAction;
     FDGUIxWaitCursor1: TFDGUIxWaitCursor;
     FDPhysSQLiteDriverLink1: TFDPhysSQLiteDriverLink;
     Rectangle1: TRectangle;
@@ -56,17 +56,24 @@ type
     LayMain: TLayout;
     Layout4: TLayout;
     BtnConvert: TButton;
-    ActUse: TAction;
+    ActRepeatConvertation: TAction;
     LayHistory: TLayout;
     Layout5: TLayout;
     BtnClearHistory: TButton;
     BtnUse: TButton;
-    ListView1: TListView;
+    LvwHistory: TListView;
     StyleBook1: TStyleBook;
     GestureManager1: TGestureManager;
     Image1: TImage;
     Rectangle3: TRectangle;
     Rectangle4: TRectangle;
+    LbxMenu: TListBox;
+    ShadowEffect1: TShadowEffect;
+    ImageList1: TImageList;
+    ListBoxItem1: TListBoxItem;
+    ListBoxItem2: TListBoxItem;
+    LbiClearHistory: TListBoxItem;
+    ActRevertConvertation: TAction;
     procedure BtnRetryClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure BtnExitClick(Sender: TObject);
@@ -80,16 +87,19 @@ type
     procedure BtnBaseClick(Sender: TObject);
     procedure BtnBuyClick(Sender: TObject);
     procedure QrySelectAllAfterOpen(DataSet: TDataSet);
-    procedure ActClearUpdate(Sender: TObject);
-    procedure ActClearExecute(Sender: TObject);
+    //procedure ActClearHistoryUpdate(Sender: TObject);
+    procedure ActClearHistoryExecute(Sender: TObject);
     procedure FDConnectionBeforeConnect(Sender: TObject);
     procedure FDConnectionAfterConnect(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
-    procedure ActUseExecute(Sender: TObject);
-    procedure ActUseUpdate(Sender: TObject);
-    procedure ListView1Gesture(Sender: TObject;
+    procedure ActRepeatConvertationExecute(Sender: TObject);
+    //procedure ActRepeatConvertationUpdate(Sender: TObject);
+    procedure LvwHistoryGesture(Sender: TObject;
       const EventInfo: TGestureEventInfo; var Handled: Boolean);
+    procedure FormKeyUp(Sender: TObject; var aKey: Word; var aKeyChar: Char;
+      aShift: TShiftState);
+    procedure ActRevertConvertationExecute(Sender: TObject);
   private
     OnNewRate: procedure of object;
     //Log: TextFile;
@@ -100,6 +110,9 @@ type
     procedure OnGetRate;
     procedure OnGetRateError(Sender: TObject);
     procedure Convert;
+    procedure ShowMenu(aShow: Boolean = TRUE);
+    procedure SetNumBuy;
+    procedure SetNumBase;
   public
   end;
 
@@ -117,6 +130,7 @@ uses JSON, Math, FMX.DialogService, FMX.Platform,
 
 procedure TFormMain.FormCreate(Sender: TObject);
 begin
+ToLog('*** CurrEx started ***');
 RESTClient.BaseURL := BASE_URL;
 RESTRequest.Resource := END_POINT_CURRENCIES;
 LblTime.Text := '';
@@ -127,9 +141,8 @@ with RESTRequest.Params.AddItem do
   end;
 self.Fill.Color := TAlphaColorRec.Lavender;
 OnNewRate := nil;
-//AssignFile(Log, TPath.Combine(TPath.GetDocumentsPath, 'CurrEx.txt'));
-//Rewrite(Log);
-ToLog('*** CurrEx started');
+LbxMenu.Visible := FALSE;
+LvwHistory.Enabled := TRUE;
 end;
 
 procedure TFormMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -169,6 +182,17 @@ Footer.Enabled := TRUE;
 BtnRetry.Visible := FALSE;
 BtnExit.Visible := FALSE;
 BtnRetry.OnClick(nil);
+end;
+
+procedure TFormMain.FormKeyUp(Sender: TObject; var aKey: Word; var aKeyChar: Char;
+  aShift: TShiftState);
+begin
+if aKey = vkHardwareBack then
+  if LbxMenu.Visible then
+    begin
+    ShowMenu(FALSE);
+    aKey := 0;
+    end;
 end;
 
 procedure TFormMain.FDConnectionBeforeConnect(Sender: TObject);
@@ -417,9 +441,10 @@ with FormCurrencies do
   end;
 end;
 
-procedure TFormMain.ActClearExecute(Sender: TObject);
+procedure TFormMain.ActClearHistoryExecute(Sender: TObject);
 var n: Cardinal;
 begin
+ShowMenu(FALSE);
 TDialogService.MessageDialog('Clear the history of convertations ?',
       TMsgDlgType.mtCustom, [TMsgDlgBtn.mbCancel, TMsgDlgBtn.mbYes],
       TMsgDlgBtn.mbCancel, 0,
@@ -435,19 +460,19 @@ TDialogService.MessageDialog('Clear the history of convertations ?',
           end
 );
 end;
-
-procedure TFormMain.ActClearUpdate(Sender: TObject);
+{
+procedure TFormMain.ActClearHistoryUpdate(Sender: TObject);
 var NewEnabled: Boolean;
 begin
-with ListView1 do
+with LvwHistory do
   NewEnabled := Items.Count > 0;
-if NewEnabled <> ActClear.Enabled then
+if NewEnabled <> ActClearHistory.Enabled then
   if NewEnabled
     then BtnClearHistory.StyleLookup := 'BtnClearStyle'
     else BtnClearHistory.StyleLookup := 'BtnClearStyleDisabled';
-ActClear.Enabled := NewEnabled;
+ActClearHistory.Enabled := NewEnabled;
 end;
-
+}
 procedure TFormMain.ActConvertUpdate(Sender: TObject);
 var NewEnabled: Boolean;
 begin
@@ -460,71 +485,113 @@ if NewEnabled <> ActConvert.Enabled then
 ActConvert.Enabled := NewEnabled;
 end;
 
-var LongTap: Boolean = FALSE;
+//var LongTap: Boolean = FALSE;
+var ValueToSet: String = '';
 
-procedure TFormMain.ActUseExecute(Sender: TObject);
+procedure TFormMain.ActRepeatConvertationExecute(Sender: TObject);
 var words: TArray<String>;
 begin
-with ListView1 do
-  if (ItemIndex >= 0) and (not LongTap) then
-    try
-    LongTap := TRUE;
-    TDialogService.MessageDialog('Use this convertation as a template ?',
+ShowMenu(FALSE);
+with LvwHistory do
+  if (ItemIndex >= 0) {and (not LongTap)} then
+    begin
+//    LongTap := TRUE;
+    TDialogService.MessageDialog('Use this convertation as a template for the next operation ?',
           TMsgDlgType.mtCustom, [TMsgDlgBtn.mbCancel, TMsgDlgBtn.mbYes],
           TMsgDlgBtn.mbCancel, 0,
               procedure(const aResult: TModalResult)  // always 1 ???
               begin
-                LongTap := FALSE;
+//                LongTap := FALSE;
                 if aResult = mrYes then
                   begin
                   words := Items[ItemIndex].Text.Split([' ']);
                   CurBase := words[1];
-                  BtnBase.Text := CurBase;
-                  NumBuy.OnChange := nil;
-                  try
-                    NumBase.Value := StrToFloat(words[0]);
-                  finally
-                    NumBuy.OnChange := NumBuyChange;
-                  end;
                   CurBuy := words[4];
-                  BtnBuy.Text := CurBuy;
+                  OnNewRate := SetNumBase;
+                  ValueToSet := words[0];
                   BtnRate.OnClick(nil);
                   end;
               end
     );
-    finally
-    //  
     end;
 end;
 
-procedure TFormMain.ActUseUpdate(Sender: TObject);
+procedure TFormMain.SetNumBase;
+begin
+OnNewRate := nil;
+NumBase.Value := StrToFloat(ValueToSet);
+end;
+
+procedure TFormMain.ActRevertConvertationExecute(Sender: TObject);
+var words: TArray<String>;
+begin
+ShowMenu(FALSE);
+with LvwHistory do
+  if (ItemIndex >= 0) then
+    TDialogService.MessageDialog('Use this convertation as a REVERSE template for the next operation ?',
+          TMsgDlgType.mtCustom, [TMsgDlgBtn.mbCancel, TMsgDlgBtn.mbYes],
+          TMsgDlgBtn.mbCancel, 0,
+              procedure(const aResult: TModalResult)  // always 1 ???
+              begin
+                if aResult = mrYes then
+                  begin
+                  words := Items[ItemIndex].Text.Split([' ']);
+                  CurBase := words[4];
+                  CurBuy := words[1];
+                  OnNewRate := SetNumBuy;
+                  ValueToSet := words[3];
+                  BtnRate.OnClick(nil);
+                  end;
+              end
+    );
+end;
+
+procedure TFormMain.SetNumBuy;
+begin
+OnNewRate := nil;
+NumBuy.Value := StrToFloat(ValueToSet);
+end;
+{
+procedure TFormMain.ActRepeatConvertationUpdate(Sender: TObject);
 var NewVisible: Boolean;
     words: TArray<String>;
 begin
-with ListView1 do
+with LvwHistory do
   begin
   NewVisible := ItemIndex >= 0;
   if NewVisible then
     begin
     words := Items[ItemIndex].Text.Split([' ']);
-    NewVisible := (CurBase <> words[1]) or (CurBuy <> words[4]) or 
+    NewVisible := (CurBase <> words[1]) or (CurBuy <> words[4]) or
                   (NumBase.Text <> words[0]);
     end;
-  ActUse.Visible := NewVisible;
+  ActRepeatConvertation.Visible := NewVisible;
+  end;
+end;
+}
+procedure TFormMain.ShowMenu(aShow: Boolean = TRUE);
+begin
+with LbxMenu do
+  begin
+  ItemIndex := -1;
+  Visible := aShow;
+  Position.Y := (TLayout(Parent).Height - Height) / 2;
+  LvwHistory.Enabled := not aShow;
   end;
 end;
 
-procedure TFormMain.ListView1Gesture(Sender: TObject;
+procedure TFormMain.LvwHistoryGesture(Sender: TObject;
   const EventInfo: TGestureEventInfo; var Handled: Boolean);
 var rec: TRectF;
 begin
 if EventInfo.GestureID = System.UITypes.igiLongTap then
-  with ListView1 do 
+  with LvwHistory do
     begin
-    rec := LocalToAbsolute( GetItemRect(ListView1.Items.Count-1) );
-    if (EventInfo.Location.Y < rec.Bottom) and ActUse.Visible then
+    rec := LocalToAbsolute( GetItemRect(LvwHistory.Items.Count-1) );
+    if (EventInfo.Location.Y < rec.Bottom) {and ActUse.Visible} then
       begin
-      ActUseExecute(nil);
+      //ActUseExecute(nil);
+      ShowMenu;
       Handled := TRUE;
       end;
     end;
@@ -562,10 +629,10 @@ procedure TFormMain.QrySelectAllAfterOpen(DataSet: TDataSet);
 var words: TArray<String>;
 begin
 DataSet.Last;
-ListView1.Items.Clear;
+LvwHistory.Items.Clear;
 while not DataSet.Bof do
   begin
-  with ListView1.Items.Add do
+  with LvwHistory.Items.Add do
     begin
     words := DataSet.Fields[0].AsString.Split([' / ']);
     Text := words[0];
@@ -573,10 +640,11 @@ while not DataSet.Bof do
     end;
   DataSet.Prior;
   end;
-ListView1.ItemIndex := IfThen(DataSet.RecordCount > 0, 0, -1);
-if (CurRate <= 0) and (ListView1.Items.Count > 0) then
-  begin
-  words := ListView1.Items[0].Text.Split([' ']);
+LvwHistory.ItemIndex := IfThen(DataSet.RecordCount > 0, 0, -1);
+if (CurRate <= 0) and (LvwHistory.Items.Count > 0) then
+  begin // first opening
+  LvwHistory.ItemIndex := -1;
+  words := LvwHistory.Items[0].Text.Split([' ']);
   CurBase := words[1];
   CurBuy := words[4];
   end;
