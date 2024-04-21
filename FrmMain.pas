@@ -477,7 +477,7 @@ procedure TFormMain.ActConvertUpdate(Sender: TObject);
 var NewEnabled: Boolean;
 begin
 NewEnabled := (CurBase <> CurBuy) and (CurRate > 0) and
-              (NumBase.Value > 0) and (NumBuy.Value > 0);
+              (NumBase.Value > 0) and (NumBuy.Value > 0) and (not LbxMenu.Visible);
 if NewEnabled <> ActConvert.Enabled then
   if NewEnabled
     then BtnConvert.StyleLookup := 'CornerButtonStyle'
@@ -577,6 +577,9 @@ with LbxMenu do
   Visible := aShow;
   Position.Y := (TLayout(Parent).Height - Height) / 2;
   LvwHistory.Enabled := not aShow;
+  BtnBase.Enabled := not aShow;
+  BtnBuy.Enabled :=  not aShow;
+  BtnRate.Enabled :=  not aShow;
   end;
 end;
 
